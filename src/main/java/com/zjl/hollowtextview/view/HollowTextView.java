@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -36,10 +37,6 @@ public class HollowTextView extends View {
     private boolean mIsTopRightRound = false;
     private boolean mIsBottomLeftRound = false;
     private boolean mIsBottomRightRound = false;
-    private int mPaddingLeft = 0;
-    private int mPaddingRight = 0;
-    private int mPaddingTop = 0;
-    private int mPaddingBottom = 0;
 
     // content bitmap paint config
     private Paint mTextPaint;
@@ -49,7 +46,8 @@ public class HollowTextView extends View {
     private Bitmap mContentBitmap;
     private int mWidth;
     private int mHeight;
-    private Canvas bitMapCanvas;
+    private Canvas mBitmapCanvas;
+    private RectF mBitmapRectF;
 
     public HollowTextView(Context context) {
         super(context);
@@ -97,6 +95,8 @@ public class HollowTextView extends View {
         mCornerPaint.setColor(mBgColor);
         mCornerPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
 
+        mBitmapRectF = new RectF();
+
     }
 
     @Override
@@ -137,7 +137,8 @@ public class HollowTextView extends View {
                 + "]");
 
         mContentBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        bitMapCanvas = new Canvas(mContentBitmap);
+        mBitmapCanvas = new Canvas(mContentBitmap);
+        mBitmapRectF.set(0, 0, w, h);
     }
 
     @Override
@@ -154,36 +155,36 @@ public class HollowTextView extends View {
         Log.i(TAG, "----drawContentBitmap----");
         if (!TextUtils.isEmpty(mText)) {
 
-            bitMapCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            mBitmapCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
             if (mCornerRadius > 0) {
-                bitMapCanvas.drawRoundRect(0, 0, mWidth, mHeight, mCornerRadius, mCornerRadius,
-                        mBgPaint);
+                mBitmapCanvas.drawRoundRect(mBitmapRectF, mCornerRadius, mCornerRadius, mBgPaint);
+
                 if (!mIsTopLeftRound) {
-                    bitMapCanvas.drawRect(0, 0, mCornerRadius, mCornerRadius, mCornerPaint);
+                    mBitmapCanvas.drawRect(0, 0, mCornerRadius, mCornerRadius, mCornerPaint);
                 }
                 if (!mIsTopRightRound) {
-                    bitMapCanvas.drawRect(mWidth - mCornerRadius, 0, mWidth, mCornerRadius,
+                    mBitmapCanvas.drawRect(mWidth - mCornerRadius, 0, mWidth, mCornerRadius,
                             mCornerPaint);
                 }
                 if (!mIsBottomLeftRound) {
-                    bitMapCanvas.drawRect(0, mHeight - mCornerRadius, mCornerRadius, mHeight,
+                    mBitmapCanvas.drawRect(0, mHeight - mCornerRadius, mCornerRadius, mHeight,
                             mCornerPaint);
                 }
                 if (!mIsBottomRightRound) {
-                    bitMapCanvas.drawRect(mWidth - mCornerRadius, mHeight - mCornerRadius, mWidth,
+                    mBitmapCanvas.drawRect(mWidth - mCornerRadius, mHeight - mCornerRadius, mWidth,
                             mHeight, mCornerPaint);
                 }
 
             } else {
-                bitMapCanvas.drawColor(mBgColor);
+                mBitmapCanvas.drawColor(mBgColor);
             }
 
             // draw text in vertical center
             Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
             float y = ((int) (mHeight - fontMetrics.ascent) >> 1) - 3;
 
-            bitMapCanvas.drawText(mText, getPaddingLeft(), y, mTextPaint);
+            mBitmapCanvas.drawText(mText, getPaddingLeft(), y, mTextPaint);
         }
     }
 

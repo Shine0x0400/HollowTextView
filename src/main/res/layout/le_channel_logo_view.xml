@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:hollow="http://schemas.android.com/apk/res-auto"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp">
+
+    <com.zjl.hollowtextview.view.HollowTextView
+        android:id="@+id/channel_category"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="8dp"
+        hollow:bgColor="#a6ffffff"
+        hollow:cornerRadius="5dp"
+        hollow:roundBottomLeft="true"
+        hollow:roundBottomRight="false"
+        hollow:roundTopLeft="true"
+        hollow:roundTopRight="false"
+        hollow:text="乐视"
+        hollow:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/channel_number"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/channel_category"
+        android:background="@drawable/le_channel_number_bg"
+        android:gravity="center"
+        android:text="9"
+        android:textColor="#a6ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/channel_program_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/channel_number"
+        android:background="@drawable/le_channel_program_bg"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="太子妃升职记"
+        android:textColor="#a6ffffff"
+        android:textSize="30sp"/>
+
+</RelativeLayout>
